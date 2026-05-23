@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-mergeReleaseResources-43:/layout/activity_memo_edit.xml",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/activity_memo_edit.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-mergeReleaseResources-43:/layout/item_folder.xml",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/item_folder.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-mergeReleaseResources-43:/layout/item_memo.xml",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/item_memo.xml"
+    },
+    {
+        "merged": "com.ab25cq.memo.app-mergeReleaseResources-43:/layout/activity_memo_edit.xml",
+        "source": "com.ab25cq.memo.app-main-45:/layout/activity_memo_edit.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-mergeReleaseResources-43:/layout/activity_memo_view.xml",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/activity_memo_view.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-mergeReleaseResources-43:/layout/activity_main.xml",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/activity_main.xml"
+    }
+]

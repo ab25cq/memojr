@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.ab25cq.memo.app-mergeDebugResources-42:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/home/ab25cq/.gradle/caches/8.9/transforms/68bab1741e512c742b3998988136f0ca/transformed/appcompat-1.7.0/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,86 @@
+[
+    {
+        "merged": "com.ab25cq.memo.app-release-44:/layout_activity_memo_edit.xml.flat",
+        "source": "com.ab25cq.memo.app-main-45:/layout/activity_memo_edit.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/menu_menu_view.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/menu/menu_view.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/drawable_bg_thumb.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/drawable/bg_thumb.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/layout_activity_main.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/layout_activity_memo_edit.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/activity_memo_edit.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/menu_menu_edit.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/menu/menu_edit.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/drawable_ic_image.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/drawable/ic_image.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/layout_activity_memo_view.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/activity_memo_view.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/layout_item_memo.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/item_memo.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/menu_menu_main.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/menu/menu_main.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/layout_item_folder.xml.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/layout/item_folder.xml"
+    },
+    {
+        "merged": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-release-44:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/ab25cq/.gradle/daemon/8.9/com.ab25cq.memo.app-main-45:/mipmap-mdpi/ic_launcher_round.png"
+    }
+]

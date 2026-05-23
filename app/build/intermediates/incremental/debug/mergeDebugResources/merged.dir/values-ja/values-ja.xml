@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2" xmlns:ns2="http://schemas.android.com/tools">
+    <plurals name="mtrl_badge_content_description">
+    <item quantity="one">%d 件の新しい通知</item>
+    <item quantity="other">%d 件の新しい通知</item>
+  </plurals>
+    <string msgid="5976598919945601918" name="abc_action_bar_home_description">"ホームに戻る"</string>
+    <string msgid="8388173803310557296" name="abc_action_bar_up_description">"前に戻る"</string>
+    <string msgid="3937310113216875497" name="abc_action_menu_overflow_description">"その他のオプション"</string>
+    <string msgid="4692188335987374352" name="abc_action_mode_done">"完了"</string>
+    <string msgid="1189761859438369441" name="abc_activity_chooser_view_see_all">"すべて表示"</string>
+    <string msgid="2165779757652331008" name="abc_activitychooserview_choose_application">"アプリの選択"</string>
+    <string msgid="4215997306490295099" name="abc_capital_off">"OFF"</string>
+    <string msgid="884982626291842264" name="abc_capital_on">"ON"</string>
+    <string msgid="8833365367933412986" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="2223301931652355242" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="838001238306846836" name="abc_menu_delete_shortcut_label">"Delete"</string>
+    <string msgid="7986526966204849475" name="abc_menu_enter_shortcut_label">"Enter"</string>
+    <string msgid="375214403600139847" name="abc_menu_function_shortcut_label">"Function+"</string>
+    <string msgid="4192209724446364286" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="4741552369836443843" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="5473865519181928982" name="abc_menu_space_shortcut_label">"Space"</string>
+    <string msgid="6180552449598693998" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="5520303668377388990" name="abc_prepend_shortcut_label">"Menu+"</string>
+    <string msgid="7208076849092622260" name="abc_search_hint">"検索…"</string>
+    <string msgid="3741173234950517107" name="abc_searchview_description_clear">"検索キーワードを削除"</string>
+    <string msgid="693312494995508443" name="abc_searchview_description_query">"検索キーワード"</string>
+    <string msgid="3417662926640357176" name="abc_searchview_description_search">"検索"</string>
+    <string msgid="1486535517437947103" name="abc_searchview_description_submit">"検索キーワードを送信"</string>
+    <string msgid="2293578557972875415" name="abc_searchview_description_voice">"音声検索"</string>
+    <string msgid="8875138169939072951" name="abc_shareactionprovider_share_with">"共有"</string>
+    <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"<ns1:g id="APPLICATION_NAME">%s</ns1:g>と共有"</string>
+    <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"折りたたむ"</string>
+    <string name="app_name">メモジュニア</string>
+    <string name="bottomsheet_action_collapse">ボトムシートを閉じる</string>
+    <string name="bottomsheet_action_expand">ボトムシートを開く</string>
+    <string name="bottomsheet_action_expand_halfway">下半分を展開</string>
+    <string name="bottomsheet_drag_handle_clicked">ドラッグ ハンドルをダブルタップしました</string>
+    <string name="bottomsheet_drag_handle_content_description">ドラッグ ハンドル</string>
+    <string msgid="881409763997275156" name="call_notification_answer_action">"応答"</string>
+    <string msgid="8793775615905189152" name="call_notification_answer_video_action">"ビデオ"</string>
+    <string msgid="3229508546291798546" name="call_notification_decline_action">"拒否"</string>
+    <string msgid="2659457946726154263" name="call_notification_hang_up_action">"通話終了"</string>
+    <string msgid="6107532579223922871" name="call_notification_incoming_text">"着信"</string>
+    <string msgid="8623827134497363134" name="call_notification_ongoing_text">"通話中"</string>
+    <string msgid="59049573811482460" name="call_notification_screening_text">"着信をスクリーニング中"</string>
+    <string name="cancel">キャンセル</string>
+    <string name="cat_basic">基本</string>
+    <string name="cat_calculus">解析</string>
+    <string name="cat_decoration">装飾</string>
+    <string name="cat_functions">関数</string>
+    <string name="cat_linear_algebra">線形代数</string>
+    <string name="cat_set_logic">集合・論理</string>
+    <string name="character_counter_content_description">入力済み文字数: %1$d/%2$d</string>
+    <string name="character_counter_overflowed_content_description">文字数制限を超えています（%1$d/%2$d 文字）</string>
+    <string name="clear_text_end_icon_content_description">テキストを消去</string>
+    <string name="confirm_delete_folder_msg">「%s」を削除しますか？\n中のメモとサブフォルダは親フォルダへ移動されます。</string>
+    <string name="confirm_delete_memo_msg">「%s」を削除しますか？</string>
+    <string name="create">作成</string>
+    <string name="create_image_memo">画像メモを作成</string>
+    <string name="crop">切り取り</string>
+    <string name="crop_error">切り取りに失敗しました</string>
+    <string name="crop_start_failed">切り取り開始に失敗しました</string>
+    <string name="crop_title">切り取り</string>
+    <string name="delete">削除</string>
+    <string name="delete_folder">フォルダを削除</string>
+    <string name="delete_memo_title">メモを削除</string>
+    <string name="discard">破棄</string>
+    <string name="discard_changes">変更を破棄</string>
+    <string name="discard_message">保存せずに閉じますか？</string>
+    <string name="edit">編集</string>
+    <string name="edit_image">画像の編集</string>
+    <string name="empty_hint">右下の＋でメモ追加、メニューからフォルダ作成</string>
+    <string name="error_a11y_label">エラー: 無効</string>
+    <string name="error_icon_content_description">エラー</string>
+    <string name="export_backup">バックアップをエクスポート</string>
+    <string name="export_failed">エクスポート失敗: %s</string>
+    <string name="export_success">%d件のメモをエクスポートしました</string>
+    <string name="exposed_dropdown_menu_content_description">プルダウン メニューを表示</string>
+    <string name="folder_name_hint">フォルダ名</string>
+    <string name="hint_title">タイトル</string>
+    <string name="home">ホーム</string>
+    <string name="icon_content_description">ダイアログ アイコン</string>
+    <string name="image_load_error">画像を読み込めませんでした</string>
+    <string name="image_load_failed">画像の読み込みに失敗しました</string>
+    <string name="image_process_failed">画像処理に失敗しました</string>
+    <string name="import_backup">バックアップから復元</string>
+    <string name="import_backup_message">既存のメモを残したまま追加インポートします。\nJSONファイルを選択してください。</string>
+    <string name="import_failed">インポート失敗: %s</string>
+    <string name="import_success">%d件のメモをインポートしました</string>
+    <string name="import_success_skipped">%1$d件インポート、%2$d件重複スキップ</string>
+    <string name="insert_image">画像を挿入</string>
+    <string name="insert_math">数式を挿入</string>
+    <string name="item_title_format">「%s」</string>
+    <string name="item_view_role_description">タブ</string>
+    <string name="material_clock_toggle_content_description">午前または午後を選択</string>
+    <string name="material_hour_24h_suffix">%1$s 時間</string>
+    <string name="material_hour_selection">時刻を選択してください</string>
+    <string name="material_hour_suffix">%1$s時</string>
+    <string name="material_minute_selection">分を選択</string>
+    <string name="material_minute_suffix">%1$s分</string>
+    <string name="material_timepicker_am">AM</string>
+    <string name="material_timepicker_clock_mode_description">時刻を時計で入力するモードに切り替えます。</string>
+    <string name="material_timepicker_hour">時間</string>
+    <string name="material_timepicker_minute">分</string>
+    <string name="material_timepicker_pm">PM</string>
+    <string name="material_timepicker_select_time">時間を選択</string>
+    <string name="material_timepicker_text_input_mode_description">時刻をテキストで入力するモードに切り替えます。</string>
+    <string name="math_back_to_list">◀ 一覧へ戻る</string>
+    <string name="math_block">ブロック ($$...$$)</string>
+    <string name="math_block_insert">ブロック表示 $$…$$</string>
+    <string name="math_direct_input">✏  直接入力 (LaTeX を手書き)</string>
+    <string name="math_greek_list">   ギリシャ文字・特殊記号 一覧 →</string>
+    <string name="math_greek_symbols">ギリシャ文字・特殊記号</string>
+    <string name="math_hint">LaTeX式を入力 (例: E=mc^2)</string>
+    <string name="math_inline">インライン ($...$)</string>
+    <string name="math_inline_insert">インライン挿入 $…$</string>
+    <string name="math_pattern_prefix">パターン: %s</string>
+    <string name="math_wizard">数式ウィザード</string>
+    <string name="move_memo">フォルダへ移動</string>
+    <string name="mtrl_badge_numberless_content_description">新しい通知</string>
+    <string name="mtrl_checkbox_state_description_checked">オン</string>
+    <string name="mtrl_checkbox_state_description_indeterminate">一部オン</string>
+    <string name="mtrl_checkbox_state_description_unchecked">オフ</string>
+    <string name="mtrl_chip_close_icon_content_description">%1$s を削除します</string>
+    <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">%1$d 件以上の新しい通知</string>
+    <string name="mtrl_picker_a11y_next_month">翌月に変更</string>
+    <string name="mtrl_picker_a11y_prev_month">前月に変更</string>
+    <string name="mtrl_picker_announce_current_range_selection">開始日の選択: %1$s – 終了日の選択: %2$s</string>
+    <string name="mtrl_picker_announce_current_selection">現在の選択: %1$s</string>
+    <string name="mtrl_picker_announce_current_selection_none">なし</string>
+    <string name="mtrl_picker_cancel">キャンセル</string>
+    <string name="mtrl_picker_confirm">OK</string>
+    <string name="mtrl_picker_date_header_selected">%1$s</string>
+    <string name="mtrl_picker_date_header_title">日付を選択してください</string>
+    <string name="mtrl_picker_date_header_unselected">選択した日付</string>
+    <string name="mtrl_picker_day_of_week_column_header">%1$s</string>
+    <string name="mtrl_picker_end_date_description">終了日 %1$s</string>
+    <string name="mtrl_picker_invalid_format">形式が無効です。</string>
+    <string name="mtrl_picker_invalid_format_example">例: %1$s</string>
+    <string name="mtrl_picker_invalid_format_use">使用: %1$s</string>
+    <string name="mtrl_picker_invalid_range">範囲が無効です。</string>
+    <string name="mtrl_picker_navigate_to_current_year_description">現在の年（%1$d）に移動</string>
+    <string name="mtrl_picker_navigate_to_year_description">%1$d 年に移動</string>
+    <string name="mtrl_picker_out_of_range">範囲外: %1$s</string>
+    <string name="mtrl_picker_range_header_only_end_selected">開始日～%1$s</string>
+    <string name="mtrl_picker_range_header_only_start_selected">%1$s～終了日</string>
+    <string name="mtrl_picker_range_header_selected">%1$s～%2$s</string>
+    <string name="mtrl_picker_range_header_title">期間を選択してください</string>
+    <string name="mtrl_picker_range_header_unselected">開始日～終了日</string>
+    <string name="mtrl_picker_save">保存</string>
+    <string name="mtrl_picker_start_date_description">開始日 %1$s</string>
+    <string name="mtrl_picker_text_input_date_hint">日付</string>
+    <string name="mtrl_picker_text_input_date_range_end_hint">終了日</string>
+    <string name="mtrl_picker_text_input_date_range_start_hint">開始日</string>
+    <string name="mtrl_picker_text_input_day_abbr">d</string>
+    <string name="mtrl_picker_text_input_month_abbr">m</string>
+    <string name="mtrl_picker_text_input_year_abbr">y</string>
+    <string name="mtrl_picker_today_description">今日（%1$s）</string>
+    <string name="mtrl_picker_toggle_to_calendar_input_mode">カレンダー入力モードに切り替え</string>
+    <string name="mtrl_picker_toggle_to_day_selection">タップするとカレンダー表示に切り替わります</string>
+    <string name="mtrl_picker_toggle_to_text_input_mode">テキスト入力モードに切り替え</string>
+    <string name="mtrl_picker_toggle_to_year_selection">タップすると年表示に切り替わります</string>
+    <string name="mtrl_timepicker_cancel">キャンセル</string>
+    <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="new_folder">新しいフォルダ</string>
+    <string name="new_memo">新しいメモ</string>
+    <string name="param_argument">引数</string>
+    <string name="param_base">底</string>
+    <string name="param_base_a">底 a</string>
+    <string name="param_char">文字</string>
+    <string name="param_content">中身</string>
+    <string name="param_degree_n">次数 n</string>
+    <string name="param_denominator">分母 (下)</string>
+    <string name="param_dx">分母の変数 x</string>
+    <string name="param_dy">分子の変数 y</string>
+    <string name="param_element">要素</string>
+    <string name="param_exponent">指数</string>
+    <string name="param_fn_name">関数名 (sin/cos/tan/arcsin/arccos/arctan/sinh/cosh)</string>
+    <string name="param_function">関数</string>
+    <string name="param_integrand">被積分関数</string>
+    <string name="param_left">左辺</string>
+    <string name="param_limit_to">収束先</string>
+    <string name="param_lower_bound">下限</string>
+    <string name="param_lower_label">下の文字</string>
+    <string name="param_mantissa">真数</string>
+    <string name="param_matrix">行列名</string>
+    <string name="param_numerator">分子 (上)</string>
+    <string name="param_proposition">命題</string>
+    <string name="param_right">右辺</string>
+    <string name="param_set">集合</string>
+    <string name="param_set1">集合1</string>
+    <string name="param_set2">集合2</string>
+    <string name="param_subscript_lbl">添字</string>
+    <string name="param_upper_bound">上限</string>
+    <string name="param_upper_label">上の文字</string>
+    <string name="param_variable">変数</string>
+    <string name="param_vec1">ベクトル1</string>
+    <string name="param_vec2">ベクトル2</string>
+    <string name="param_vector">ベクトル</string>
+    <string name="password_toggle_content_description">パスワードを表示</string>
+    <string name="pick_file">ファイルから選ぶ</string>
+    <string name="pick_gallery">フォト / ギャラリー</string>
+    <string name="preview">プレビュー</string>
+    <string name="rename">変更</string>
+    <string name="rename_folder">フォルダ名を変更</string>
+    <string name="resize">リサイズ</string>
+    <string name="resize_custom_px">幅をピクセルで指定...</string>
+    <string name="root_folder">ルート（フォルダなし）</string>
+    <string name="rotate_90">90° 右回転</string>
+    <string name="save">保存</string>
+    <string name="saved">保存しました</string>
+    <string msgid="6264217191555673260" name="search_menu_title">"検索"</string>
+    <string name="searchview_clear_text_content_description">テキストを消去</string>
+    <string name="searchview_navigation_content_description">戻る</string>
+    <string name="select">選択</string>
+    <string name="set_width_title">幅を指定</string>
+    <string name="side_sheet_accessibility_pane_title">サイドシート</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="tmpl_abs">絶対値 |x|</string>
+    <string name="tmpl_binom">二項係数 C(n,k)</string>
+    <string name="tmpl_ceil">ceil 関数 ⌈x⌉</string>
+    <string name="tmpl_ddot">ダブルドット ddot</string>
+    <string name="tmpl_deriv">微分 dy/dx</string>
+    <string name="tmpl_det">行列式 det(A)</string>
+    <string name="tmpl_dot">ドット dot (時間微分)</string>
+    <string name="tmpl_elem_in">属する ∈</string>
+    <string name="tmpl_elem_notin">属さない ∉</string>
+    <string name="tmpl_exists">存在 ∃</string>
+    <string name="tmpl_exp">指数関数 e^x</string>
+    <string name="tmpl_floor">floor 関数 ⌊x⌋</string>
+    <string name="tmpl_forall">全称 ∀</string>
+    <string name="tmpl_fraction">分数</string>
+    <string name="tmpl_hat">ハット hat</string>
+    <string name="tmpl_inner_prod">内積 ⟨u, v⟩</string>
+    <string name="tmpl_integral_def">定積分 ∫</string>
+    <string name="tmpl_integral_indef">不定積分 ∫</string>
+    <string name="tmpl_intersect">積集合 ∩</string>
+    <string name="tmpl_inv">逆行列 A^{-1}</string>
+    <string name="tmpl_limit">極限 lim</string>
+    <string name="tmpl_ln">自然対数 ln</string>
+    <string name="tmpl_log">対数 log_a</string>
+    <string name="tmpl_mat2">2×2 行列</string>
+    <string name="tmpl_mat3">3×3 行列</string>
+    <string name="tmpl_norm">ノルム ‖v‖</string>
+    <string name="tmpl_nth_root">n 乗根</string>
+    <string name="tmpl_overbrace">オーバーブレース</string>
+    <string name="tmpl_overline">上線 overline</string>
+    <string name="tmpl_partial">偏微分 ∂f/∂x</string>
+    <string name="tmpl_partial2">二階偏微分</string>
+    <string name="tmpl_pm">プラスマイナス ±</string>
+    <string name="tmpl_power">累乗・指数</string>
+    <string name="tmpl_power_sub">累乗＋添字</string>
+    <string name="tmpl_prod">積 Π</string>
+    <string name="tmpl_sqrt">平方根 √</string>
+    <string name="tmpl_subscript">添字 (下付き)</string>
+    <string name="tmpl_subset">部分集合 ⊆</string>
+    <string name="tmpl_sum">総和 Σ</string>
+    <string name="tmpl_tilde_dec">チルダ tilde</string>
+    <string name="tmpl_transpose">転置 A^T</string>
+    <string name="tmpl_trig">三角関数</string>
+    <string name="tmpl_underbrace">アンダーブレース</string>
+    <string name="tmpl_union">和集合 ∪</string>
+    <string name="tmpl_vec_arrow">ベクトル (矢印)</string>
+    <string name="tmpl_vec_bold">ベクトル (太字)</string>
+    <string name="untitled">(無題)</string>
+    <string name="width_px_hint">幅（ピクセル）</string>
+</resources>

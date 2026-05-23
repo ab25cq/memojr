@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "com.ab25cq.memo.app-mergeDebugResources-43:/layout/activity_memo_edit.xml",
+        "source": "com.ab25cq.memo.app-main-46:/layout/activity_memo_edit.xml"
+    },
+    {
+        "merged": "com.ab25cq.memo.app-mergeDebugResources-43:/layout/activity_main.xml",
+        "source": "com.ab25cq.memo.app-main-46:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.ab25cq.memo.app-mergeDebugResources-43:/layout/activity_memo_view.xml",
+        "source": "com.ab25cq.memo.app-main-46:/layout/activity_memo_view.xml"
+    },
+    {
+        "merged": "com.ab25cq.memo.app-mergeDebugResources-43:/layout/item_folder.xml",
+        "source": "com.ab25cq.memo.app-main-46:/layout/item_folder.xml"
+    },
+    {
+        "merged": "com.ab25cq.memo.app-mergeDebugResources-43:/layout/item_memo.xml",
+        "source": "com.ab25cq.memo.app-main-46:/layout/item_memo.xml"
+    }
+]

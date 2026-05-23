@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+      background: #fff;
+      overflow-x: hidden;
+    }
+
+    #editor {
+      min-height: 100vh;
+      padding: 16px;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #212121;
+      outline: none;
+      word-break: break-word;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    #editor:empty::before {
+      content: "ここに入力してください。数式は $LaTeX$ または $$LaTeX$$ 形式で書けます。";
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    #editor img { max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0; display: block; }
+    #editor pre { background: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 0.9em; white-space: pre-wrap; }
+    #editor code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+    #editor blockquote { border-left: 4px solid #1976D2; padding-left: 12px; color: #555; }
+    #editor table { border-collapse: collapse; width: 100%; }
+    #editor th, #editor td { border: 1px solid #ccc; padding: 6px 10px; }
+    #editor th { background: #e3f2fd; }
+    #editor h1 { font-size: 1.5em; border-bottom: 2px solid #1976D2; padding-bottom: 6px; margin: 8px 0; color: #1976D2; }
+    #editor h2 { font-size: 1.3em; color: #1565C0; margin: 6px 0; }
+    #editor h3 { font-size: 1.1em; margin: 4px 0; }
+
+    .math-inline {
+      display: inline;
+      background: #fff8e1;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-family: monospace;
+      font-size: 0.95em;
+      color: #e65100;
+      white-space: nowrap;
+    }
+    .math-block {
+      display: block;
+      background: #fff8e1;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin: 8px 0;
+      font-family: monospace;
+      font-size: 0.95em;
+      color: #e65100;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="editor" contenteditable="true" spellcheck="false"></div>
+
+  <script>
+    const editor = document.getElementById('editor');
+
+    // ── LaTeX コマンド名一覧（区切り文字なしで貼られた場合の自動検出用） ──
+    const LATEX_CMD_NAMES = [
+      'alpha','beta','gamma','delta','epsilon','varepsilon','zeta','eta',
+      'theta','vartheta','iota','kappa','lambda','mu','nu','xi','pi','varpi',
+      'rho','varrho','sigma','varsigma','tau','upsilon','phi','varphi','chi',
+      'psi','omega',
+      'Alpha','Beta','Gamma','Delta','Epsilon','Zeta','Eta','Theta','Iota',
+      'Kappa','Lambda','Mu','Nu','Xi','Pi','Rho','Sigma','Tau','Upsilon',
+      'Phi','Chi','Psi','Omega',
+      'sum','prod','int','oint','iint','iiint','lim','limsup','liminf',
+      'sup','inf','max','min','gcd',
+      'infty','partial','nabla','hbar','ell','wp','aleph',
+      'sqrt','frac','dfrac','tfrac','binom','over','choose',
+      'cdot','times','div','pm','mp','oplus','otimes','circ','bullet',
+      'leq','geq','neq','approx','equiv','sim','simeq','cong','propto','ll','gg',
+      'rightarrow','leftarrow','Rightarrow','Leftarrow','leftrightarrow',
+      'Leftrightarrow','to','gets','mapsto','longrightarrow',
+      'in','notin','ni','subset','supset','subseteq','supseteq',
+      'cup','cap','emptyset','varnothing','setminus',
+      'forall','exists','nexists','neg','lnot','wedge','vee','land','lor',
+      'vec','hat','bar','tilde','dot','ddot','breve','acute','grave',
+      'overline','underline','widehat','widetilde','overbrace','underbrace',
+      'sin','cos','tan','sec','csc','cot','arcsin','arccos','arctan',
+      'sinh','cosh','tanh','coth',
+      'log','ln','exp','det','dim','ker','hom','arg','deg',
+      'Re','Im',
+      'ldots','cdots','vdots','ddots',
+      'left','right','big','Big','bigg','Bigg','middle',
+      'text','operatorname','mbox',
+      'mathbb','mathbf','mathit','mathrm','mathcal','mathfrak','boldsymbol',
+      'not','quad','qquad',
+      'begin','end',
+    ];
+    const _CMDS_PATTERN = LATEX_CMD_NAMES.join('|');
+    const _HAS_LATEX_RE = new RegExp('\\\\(?:' + _CMDS_PATTERN + ')\\b');
+
+    /**
+     * プレーンテキスト中の未区切りLaTeXコマンドを $...$ / $$...$$ で囲む。
+     * Keep等を経由して $delimiter が消えた場合に対処。
+     */
+    function autoAddMathDelimiters(text) {
+      if (!_HAS_LATEX_RE.test(text)) return text; // LaTeXコマンドなし
+
+      // 既存の $...$ を保護
+      const saved = [];
+      let s = text.replace(/\$\$[\s\S]*?\$\$|\$[^$\n]*?\$/g, m => {
+        saved.push(m);
+        return '\x00' + (saved.length - 1) + '\x00';
+      });
+
+      // \cmd{}{} ^{} _{} を1トークンとして $...$ で囲む
+      const braceArg  = '(?:\\{[^{}]*(?:\\{[^{}]*\\}[^{}]*)*\\})';
+      const scriptArg = '(?:[_^](?:' + braceArg + '|[^\\s{}]))';
+      const tokenRe   = new RegExp(
+        '\\\\(?:' + _CMDS_PATTERN + ')\\b' +
+        '(?:' + braceArg  + ')*' +
+        '(?:' + scriptArg + ')*',
+        'g'
+      );
+      s = s.replace(tokenRe, m => '$' + m + '$');
+
+      // 隣接する $A$ op $B$ → $A op B$ にマージ（最大5パス）
+      const mergeRe = /\$([^$\n]+)\$(\s*(?:[=+\-*\/×÷·<>≤≥≠≈^,]|\\(?:cdot|times|div|pm|leq|geq|neq|approx|to|rightarrow|Rightarrow|in|subset|cup|cap|oplus|otimes|wedge|vee))\s*)\$([^$\n]+)\$/g;
+      for (let i = 0; i < 5; i++) {
+        s = s.replace(mergeRe, (_, a, op, b) => '$' + a + op + b + '$');
+      }
+
+      // 保護していた $...$ を復元
+      s = s.replace(/\x00(\d+)\x00/g, (_, i) => saved[+i]);
+      return s;
+    }
+
+    // ── エディタ API ──
+    function getContent() { return editor.innerHTML; }
+
+    function setContent(html) {
+      editor.innerHTML = html;
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function insertAtCursor(html) {
+      editor.focus();
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) { editor.innerHTML += html; return; }
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      const frag = document.createDocumentFragment();
+      let last = null, child;
+      while ((child = div.firstChild)) last = frag.appendChild(child);
+      range.insertNode(frag);
+      if (last) {
+        const r = range.cloneRange();
+        r.setStartAfter(last);
+        r.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(r);
+      }
+      notifyChanged();
+    }
+
+    function insertMath(latex, isDisplay) {
+      if (isDisplay) {
+        insertAtCursor('<div class="math-block">$$' + escapeHtml(latex) + '$$</div><br>');
+      } else {
+        insertAtCursor('<span class="math-inline">$' + escapeHtml(latex) + '$</span>&nbsp;');
+      }
+    }
+
+    function insertImage(dataUrl) {
+      insertAtCursor('<img src="' + dataUrl + '"><br>');
+    }
+
+    function insertPendingImage() {
+      var url = Android.consumePendingImage();
+      if (url) insertImage(url);
+    }
+
+    function getImageSrcAtIndex(index) {
+      var imgs = editor.querySelectorAll('img');
+      return imgs[index] ? imgs[index].src : '';
+    }
+
+    function updateImageAtIndex(index, dataUrl) {
+      var imgs = editor.querySelectorAll('img');
+      if (imgs[index]) { imgs[index].src = dataUrl; notifyChanged(); }
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function notifyChanged() {
+      if (window.Android && Android.onChanged) Android.onChanged();
+    }
+
+    // ── 貼り付けハンドラ ──
+    editor.addEventListener('paste', function(e) {
+      e.preventDefault();
+      const clip = e.clipboardData;
+
+      // HTMLクリップボード（Gemini等のリッチテキスト）を優先
+      const html = clip.getData('text/html');
+      if (html) {
+        document.execCommand('insertHTML', false, sanitize(html));
+      } else {
+        // プレーンテキスト：LaTeXコマンドを自動検出して $...$ を補完
+        const raw = clip.getData('text/plain');
+        const processed = autoAddMathDelimiters(raw);
+        const htmlText = processed
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          // $...$ をモノスペースで表示（プレビュー時にKaTeXがレンダリング）
+          .replace(/\$\$([^$]+)\$\$/g, '<span class="math-block">$$$$1$$</span>')
+          .replace(/\$([^$\n]+)\$/g,   '<span class="math-inline">$$$1$</span>')
+          .replace(/\n/g, '<br>');
+        document.execCommand('insertHTML', false, htmlText);
+      }
+      notifyChanged();
+    });
+
+    function sanitize(html) {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      ['script','style','iframe','form','input'].forEach(tag =>
+        div.querySelectorAll(tag).forEach(el => el.remove())
+      );
+      div.querySelectorAll('*').forEach(el => {
+        Array.from(el.attributes).forEach(attr => {
+          if (attr.name.startsWith('on') ||
+              (attr.name === 'href' && attr.value.startsWith('javascript:'))) {
+            el.removeAttribute(attr.name);
+          }
+        });
+      });
+      // GeminiのMathML → $...$
+      div.querySelectorAll('math').forEach(mathEl => {
+        const alt = mathEl.getAttribute('alttext') || mathEl.textContent;
+        if (alt) {
+          const span = document.createElement('span');
+          span.className = 'math-inline';
+          span.textContent = '$' + alt + '$';
+          mathEl.replaceWith(span);
+        }
+      });
+      // HTMLクリップボード内の未区切りLaTeXもテキストノードで検出
+      wrapLatexInTextNodes(div);
+      return div.innerHTML;
+    }
+
+    // HTML内のテキストノードを走査して未区切りLaTeXを補完
+    function wrapLatexInTextNodes(root) {
+      const SKIP = new Set(['SCRIPT','STYLE','CODE','PRE','TEXTAREA']);
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(n) {
+          let p = n.parentElement;
+          while (p && p !== root) {
+            if (SKIP.has(p.tagName) || p.classList.contains('math-inline') ||
+                p.classList.contains('math-block')) return NodeFilter.FILTER_REJECT;
+            p = p.parentElement;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes = [];
+      let n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      nodes.forEach(node => {
+        const processed = autoAddMathDelimiters(node.textContent);
+        if (processed === node.textContent) return;
+        const span = document.createElement('span');
+        // $...$ をspanに変換してからDOMに挿入
+        span.innerHTML = processed
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/\$\$([^$]+)\$\$/g, '<span class="math-block">$$$$1$$</span>')
+          .replace(/\$([^$\n]+)\$/g,   '<span class="math-inline">$$$1$</span>');
+        node.parentNode.replaceChild(span, node);
+      });
+    }
+
+    // ── 画像長押し編集 ──
+    var _lpTimer = null, _lpTarget = null, _lpLast = 0;
+    function _fireLp(target) {
+      var now = Date.now();
+      if (now - _lpLast < 800) return;
+      _lpLast = now;
+      var idx = Array.from(editor.querySelectorAll('img')).indexOf(target);
+      if (idx >= 0 && window.Android) Android.onImageLongPress(idx);
+    }
+    editor.addEventListener('touchstart', function(e) {
+      var t = e.target; if (t.tagName !== 'IMG') return;
+      _lpTarget = t;
+      _lpTimer = setTimeout(function() { _lpTimer = null; if (_lpTarget) _fireLp(_lpTarget); }, 600);
+    });
+    editor.addEventListener('touchend',   function() { clearTimeout(_lpTimer); _lpTimer = null; _lpTarget = null; });
+    editor.addEventListener('touchmove',  function() { clearTimeout(_lpTimer); _lpTimer = null; });
+    editor.addEventListener('contextmenu', function(e) {
+      if (e.target.tagName !== 'IMG') return;
+      e.preventDefault();
+      _fireLp(e.target);
+    });
+
+    editor.addEventListener('input', notifyChanged);
+    editor.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
+      }
+    });
+  </script>
+</body>
+</html>
