@@ -6,7 +6,7 @@ buildはcodexなどのcliのAIを使うのが早いです。サーバーでコ�
 
 join the group
 
-https://groups.google.com/g/get12tersters
+https://groups.google.com/g/get12testers
 
 become the tester and install the app
 
