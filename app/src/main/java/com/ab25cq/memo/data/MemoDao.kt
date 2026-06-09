@@ -20,8 +20,14 @@ interface MemoDao {
     @Update
     suspend fun update(memo: Memo)
 
+    @Update
+    suspend fun updateAll(memos: List<Memo>)
+
     @Delete
     suspend fun delete(memo: Memo)
+
+    @Delete
+    suspend fun deleteAll(memos: List<Memo>)
 
     @Query("DELETE FROM memos")
     suspend fun deleteAll()

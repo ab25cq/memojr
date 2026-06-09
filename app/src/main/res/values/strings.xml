@@ -17,6 +17,8 @@
 
     <!-- General buttons / labels -->
     <string name="delete">Delete</string>
+    <string name="copy">Copy</string>
+    <string name="copy_to_folder">Copy to Folder</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
     <string name="rename">Rename</string>
@@ -33,18 +35,31 @@
     <string name="delete_memo_title">Delete Memo</string>
     <string name="confirm_delete_memo_msg">Delete \"%s\"?</string>
     <string name="root_folder">Root (no folder)</string>
+    <string name="selected_memo_count">%d selected</string>
+    <string name="copy_title_format">%s copy</string>
+    <string name="copy_memo_success">%d memo(s) copied</string>
+    <string name="copy_to_folder_success">%d memo(s) copied to folder</string>
+    <string name="confirm_delete_selected_memos_msg">Delete %d selected memo(s)?</string>
     <string name="import_backup_message">Existing memos will be kept. Please select a JSON file.</string>
     <string name="create_image_memo">Create Image Memo</string>
+    <string name="new_handwriting_memo">New Handwriting Memo</string>
     <string name="pick_gallery">Photos / Gallery</string>
     <string name="pick_file">Pick from Files</string>
+    <string name="pick_device_images">Select Images</string>
     <string name="export_success">%d memo(s) exported</string>
     <string name="export_failed">Export failed: %s</string>
     <string name="import_success">%d memo(s) imported</string>
     <string name="import_success_skipped">%1$d imported, %2$d duplicate(s) skipped</string>
     <string name="import_failed">Import failed: %s</string>
     <string name="image_load_failed">Failed to load image</string>
+    <string name="image_folder_import_success">%d image memo(s) created</string>
+    <string name="image_folder_import_empty">No image files found</string>
+    <string name="stroke_width_format">Width %d</string>
+    <string name="clear_handwriting">Clear</string>
+    <string name="handwriting_save_failed">Failed to save handwriting memo</string>
 
     <!-- MemoEditActivity -->
+    <string name="undo">Undo</string>
     <string name="insert_image">Insert Image</string>
     <string name="edit_image">Edit Image</string>
     <string name="rotate_90">Rotate 90° Right</string>

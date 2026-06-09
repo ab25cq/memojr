@@ -17,6 +17,8 @@
 
     <!-- General buttons / labels -->
     <string name="delete">削除</string>
+    <string name="copy">コピー</string>
+    <string name="copy_to_folder">フォルダへコピー</string>
     <string name="cancel">キャンセル</string>
     <string name="create">作成</string>
     <string name="rename">変更</string>
@@ -33,18 +35,31 @@
     <string name="delete_memo_title">メモを削除</string>
     <string name="confirm_delete_memo_msg">「%s」を削除しますか？</string>
     <string name="root_folder">ルート（フォルダなし）</string>
+    <string name="selected_memo_count">%d件選択中</string>
+    <string name="copy_title_format">%s のコピー</string>
+    <string name="copy_memo_success">%d件のメモをコピーしました</string>
+    <string name="copy_to_folder_success">%d件のメモをフォルダへコピーしました</string>
+    <string name="confirm_delete_selected_memos_msg">選択中の%d件のメモを削除しますか？</string>
     <string name="import_backup_message">既存のメモを残したまま追加インポートします。\nJSONファイルを選択してください。</string>
     <string name="create_image_memo">画像メモを作成</string>
+    <string name="new_handwriting_memo">手書きメモを作成</string>
     <string name="pick_gallery">フォト / ギャラリー</string>
     <string name="pick_file">ファイルから選ぶ</string>
+    <string name="pick_device_images">画像を選択</string>
     <string name="export_success">%d件のメモをエクスポートしました</string>
     <string name="export_failed">エクスポート失敗: %s</string>
     <string name="import_success">%d件のメモをインポートしました</string>
     <string name="import_success_skipped">%1$d件インポート、%2$d件重複スキップ</string>
     <string name="import_failed">インポート失敗: %s</string>
     <string name="image_load_failed">画像の読み込みに失敗しました</string>
+    <string name="image_folder_import_success">%d件の画像メモを作成しました</string>
+    <string name="image_folder_import_empty">画像ファイルが見つかりませんでした</string>
+    <string name="stroke_width_format">太さ %d</string>
+    <string name="clear_handwriting">クリア</string>
+    <string name="handwriting_save_failed">手書きメモの保存に失敗しました</string>
 
     <!-- MemoEditActivity -->
+    <string name="undo">元に戻す</string>
     <string name="insert_image">画像を挿入</string>
     <string name="edit_image">画像の編集</string>
     <string name="rotate_90">90° 右回転</string>

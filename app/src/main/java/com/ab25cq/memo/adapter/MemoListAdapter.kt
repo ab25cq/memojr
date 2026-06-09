@@ -2,13 +2,12 @@ package com.ab25cq.memo.adapter
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.text.Html
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ab25cq.memo.R
 import com.ab25cq.memo.data.Memo
@@ -20,13 +19,9 @@ import java.util.*
 class MemoListAdapter(
     private val onClick: (Memo) -> Unit,
     private val onLongClick: (Memo) -> Boolean
-) : ListAdapter<Memo, MemoListAdapter.ViewHolder>(DIFF) {
+) : RecyclerView.Adapter<MemoListAdapter.ViewHolder>() {
 
     companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<Memo>() {
-            override fun areItemsTheSame(a: Memo, b: Memo) = a.id == b.id
-            override fun areContentsTheSame(a: Memo, b: Memo) = a == b
-        }
         private val DATE_FMT = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault())
         private val IMG_SRC_RE = Regex("""src="data:image/[^;]+;base64,([^"]+)"""")
         private const val THUMB_PX = 128
@@ -34,6 +29,8 @@ class MemoListAdapter(
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private val thumbCache = HashMap<Long, Bitmap?>()
+    private val selectedIds = mutableSetOf<Long>()
+    private var items: List<Memo> = emptyList()
 
     inner class ViewHolder(val binding: ItemMemoBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -43,12 +40,16 @@ class MemoListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val memo = getItem(position)
+        val memo = items[position]
         holder.binding.apply {
             tvTitle.text = memo.title.ifEmpty { "(無題)" }
             tvDate.text  = DATE_FMT.format(Date(memo.updatedAt))
             root.setOnClickListener { onClick(memo) }
             root.setOnLongClickListener { onLongClick(memo) }
+            val selected = selectedIds.contains(memo.id)
+            root.strokeWidth = if (selected) 4 else 0
+            root.strokeColor = Color.parseColor("#1976D2")
+            root.setCardBackgroundColor(Color.parseColor(if (selected) "#E3F2FD" else "#FFFFFF"))
 
             if (memo.content.contains("base64,")) {
                 // ── 画像あり: サムネイル表示、テキストプレビュー非表示 ──
@@ -77,6 +78,21 @@ class MemoListAdapter(
                     .toString().trim().take(120)
             }
         }
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    fun submitList(memos: List<Memo>) {
+        items = memos
+        thumbCache.keys.retainAll(memos.map { it.id }.toSet())
+        notifyDataSetChanged()
+    }
+
+    fun setSelectedIds(ids: Set<Long>) {
+        if (selectedIds == ids) return
+        selectedIds.clear()
+        selectedIds.addAll(ids)
+        notifyDataSetChanged()
     }
 
     private fun decodeThumbnail(content: String): Bitmap? = runCatching {

@@ -69,11 +69,20 @@
         android:gravity="end">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabHandwriting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/new_handwriting_memo"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_handwriting" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:contentDescription="新規画像メモ"
+            android:contentDescription="@string/create_image_memo"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_image" />
 

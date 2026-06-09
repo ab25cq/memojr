@@ -40,6 +40,7 @@ class MemoEditActivity : AppCompatActivity() {
     private val editorBridge = EditorBridge()
     private var isPageLoaded = false
     private var pendingCropIndex = -1
+    private var isSaving = false
 
     private val galleryPicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         uri?.let { insertImageFromUri(it) }
@@ -132,6 +133,13 @@ class MemoEditActivity : AppCompatActivity() {
         })
     }
 
+    override fun onStop() {
+        if (!isChangingConfigurations && !isFinishing && memoId == -1L && hasUnsavedChanges) {
+            saveMemo(finishAfterSave = false, showSavedMessage = false)
+        }
+        super.onStop()
+    }
+
     @SuppressWarnings("SetJavaScriptEnabled")
     private fun setupWebView() {
         binding.webEditor.apply {
@@ -160,6 +168,7 @@ class MemoEditActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
+        binding.btnUndo.setOnClickListener { undoEdit() }
         binding.btnBold.setOnClickListener { execFormat("bold") }
         binding.btnItalic.setOnClickListener { execFormat("italic") }
         binding.btnUnderline.setOnClickListener { execFormat("underline") }
@@ -195,6 +204,15 @@ class MemoEditActivity : AppCompatActivity() {
         binding.btnPageDown.setOnClickListener {
             binding.webEditor.scrollBy(0, binding.webEditor.height * 3 / 4)
         }
+    }
+
+    private fun undoEdit() {
+        binding.webEditor.evaluateJavascript("document.execCommand('undo')") { result ->
+            if (result == "true") {
+                hasUnsavedChanges = true
+            }
+        }
+        binding.webEditor.requestFocus()
     }
 
     private fun execFormat(cmd: String, arg: String = "") {
@@ -380,7 +398,9 @@ class MemoEditActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveMemo() {
+    private fun saveMemo(finishAfterSave: Boolean = true, showSavedMessage: Boolean = true) {
+        if (isSaving || !isPageLoaded) return
+        isSaving = true
         binding.webEditor.evaluateJavascript("getContent()") { rawContent ->
             val content = rawContent.run {
                 if (startsWith("\"") && endsWith("\"")) substring(1, length - 1) else this
@@ -392,15 +412,19 @@ class MemoEditActivity : AppCompatActivity() {
                 if (memoId == -1L) {
                     val folderId = intent.getLongExtra("folder_id", -1L).let { if (it == -1L) null else it }
                     val newMemo = Memo(title = title, content = content, folderId = folderId)
-                    viewModel.insertMemo(newMemo) { id -> memoId = id }
+                    memoId = viewModel.insertMemoSync(newMemo)
                 } else {
                     val existing = viewModel.getAllMemosSync().find { it.id == memoId }
                     existing?.let {
-                        viewModel.updateMemo(it.copy(title = title, content = content, updatedAt = System.currentTimeMillis()))
+                        viewModel.updateMemoSync(it.copy(title = title, content = content, updatedAt = System.currentTimeMillis()))
                     }
                 }
                 hasUnsavedChanges = false
-                Toast.makeText(this@MemoEditActivity, getString(R.string.saved), Toast.LENGTH_SHORT).show()
+                isSaving = false
+                if (showSavedMessage) {
+                    Toast.makeText(this@MemoEditActivity, getString(R.string.saved), Toast.LENGTH_SHORT).show()
+                }
+                if (finishAfterSave) finish()
             }
         }
     }

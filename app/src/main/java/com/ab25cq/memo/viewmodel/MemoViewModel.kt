@@ -61,9 +61,19 @@ class MemoViewModel(app: Application) : AndroidViewModel(app) {
         onResult(repo.insertMemo(memo))
     }
 
+    suspend fun insertMemoSync(memo: Memo): Long = repo.insertMemo(memo)
+
     fun updateMemo(memo: Memo) = viewModelScope.launch { repo.updateMemo(memo) }
 
+    suspend fun updateMemoSync(memo: Memo) = repo.updateMemo(memo)
+
+    suspend fun updateMemosSync(memos: List<Memo>) = repo.updateMemos(memos)
+
     fun deleteMemo(memo: Memo) = viewModelScope.launch { repo.deleteMemo(memo) }
+
+    suspend fun deleteMemoSync(memo: Memo) = repo.deleteMemo(memo)
+
+    suspend fun deleteMemosSync(memos: List<Memo>) = repo.deleteMemos(memos)
 
     suspend fun getAllMemosSync(): List<Memo> = repo.getAllMemosSync()
 

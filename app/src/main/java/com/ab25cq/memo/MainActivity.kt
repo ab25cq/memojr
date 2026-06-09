@@ -31,10 +31,18 @@ import com.ab25cq.memo.data.Memo
 import com.ab25cq.memo.databinding.ActivityMainBinding
 import com.ab25cq.memo.viewmodel.FolderNavEntry
 import com.ab25cq.memo.viewmodel.MemoViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val MENU_COPY_SELECTED = 1001
+private const val MENU_MOVE_SELECTED = 1002
+private const val MENU_DELETE_SELECTED = 1003
+private const val MENU_CLEAR_SELECTION = 1004
+private const val MENU_COPY_TO_FOLDER_SELECTED = 1005
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -42,6 +50,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var folderAdapter: FolderListAdapter
     private lateinit var memoAdapter: MemoListAdapter
+    private val selectedMemoIds = mutableSetOf<Long>()
+    private var currentMemoSnapshot: List<Memo> = emptyList()
+    private var lastSelectionCount = 0
 
     private val exportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         uri?.let { exportBackup(it) }
@@ -49,11 +60,8 @@ class MainActivity : AppCompatActivity() {
     private val importLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let { importBackup(it) }
     }
-    private val imageMemoGalleryPicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        uri?.let { createImageMemo(it) }
-    }
-    private val imageMemoFilePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let { createImageMemo(it) }
+    private val imageMemoGalleryPicker = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
+        createImageMemosFromFiles(uris)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +79,12 @@ class MainActivity : AppCompatActivity() {
             updateEmptyView()
         }
         viewModel.currentMemos.observe(this) { memos ->
+            currentMemoSnapshot = memos
+            val visibleMemoIds = memos.map { it.id }.toSet()
+            val selectionChanged = selectedMemoIds.retainAll(visibleMemoIds)
             memoAdapter.submitList(memos)
+            memoAdapter.setSelectedIds(selectedMemoIds)
+            if (selectionChanged) updateSelectionChrome()
             updateEmptyView()
         }
         viewModel.folderPath.observe(this) { path ->
@@ -99,20 +112,14 @@ class MainActivity : AppCompatActivity() {
 
         memoAdapter = MemoListAdapter(
             onClick = { memo ->
-                startActivity(Intent(this, MemoViewActivity::class.java).putExtra("memo_id", memo.id))
+                if (isMemoSelectionActive()) {
+                    toggleMemoSelection(memo)
+                } else {
+                    startActivity(Intent(this, MemoViewActivity::class.java).putExtra("memo_id", memo.id))
+                }
             },
             onLongClick = { memo ->
-                val options = arrayOf(getString(R.string.delete), getString(R.string.move_memo))
-                val title = getString(R.string.item_title_format, memo.title.ifEmpty { getString(R.string.untitled) })
-                AlertDialog.Builder(this)
-                    .setTitle(title)
-                    .setItems(options) { _, which ->
-                        when (which) {
-                            0 -> confirmDeleteMemo(memo)
-                            1 -> showMoveMemoDialog(memo)
-                        }
-                    }
-                    .show()
+                toggleMemoSelection(memo)
                 true
             }
         )
@@ -129,22 +136,59 @@ class MainActivity : AppCompatActivity() {
         binding.fabImage.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.create_image_memo))
-                .setItems(arrayOf(getString(R.string.pick_gallery), getString(R.string.pick_file))) { _, which ->
-                    when (which) {
-                        0 -> imageMemoGalleryPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        1 -> imageMemoFilePicker.launch(arrayOf("image/*"))
-                    }
+                .setItems(arrayOf(getString(R.string.pick_device_images))) { _, _ ->
+                    imageMemoGalleryPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 }
                 .show()
+        }
+        binding.fabHandwriting.setOnClickListener {
+            val intent = Intent(this, HandwritingMemoActivity::class.java)
+            viewModel.currentFolderId()?.let { id -> intent.putExtra("folder_id", id) }
+            startActivity(intent)
         }
     }
 
     private fun setupBackPress() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!viewModel.navigateUp()) finish()
+                if (isMemoSelectionActive()) {
+                    clearMemoSelection()
+                } else if (!viewModel.navigateUp()) {
+                    finish()
+                }
             }
         })
+    }
+
+    private fun isMemoSelectionActive() = selectedMemoIds.isNotEmpty()
+
+    private fun toggleMemoSelection(memo: Memo) {
+        if (!selectedMemoIds.add(memo.id)) selectedMemoIds.remove(memo.id)
+        updateSelectionUi()
+    }
+
+    private fun clearMemoSelection() {
+        if (selectedMemoIds.isEmpty()) return
+        selectedMemoIds.clear()
+        updateSelectionUi()
+    }
+
+    private fun updateSelectionUi() {
+        memoAdapter.setSelectedIds(selectedMemoIds)
+        updateSelectionChrome()
+    }
+
+    private fun updateSelectionChrome() {
+        val selectionCount = selectedMemoIds.size
+        supportActionBar?.title = if (isMemoSelectionActive()) {
+            getString(R.string.selected_memo_count, selectionCount)
+        } else {
+            getString(R.string.app_name)
+        }
+        if (lastSelectionCount != selectionCount) {
+            lastSelectionCount = selectionCount
+            invalidateOptionsMenu()
+        }
     }
 
     private fun updateEmptyView() {
@@ -244,12 +288,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menu.clear()
+        if (isMemoSelectionActive()) {
+            menu.add(Menu.NONE, MENU_MOVE_SELECTED, Menu.NONE, R.string.move_memo)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            menu.add(Menu.NONE, MENU_COPY_TO_FOLDER_SELECTED, Menu.NONE, R.string.copy_to_folder)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            menu.add(Menu.NONE, MENU_COPY_SELECTED, Menu.NONE, R.string.copy)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            menu.add(Menu.NONE, MENU_DELETE_SELECTED, Menu.NONE, R.string.delete)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            menu.add(Menu.NONE, MENU_CLEAR_SELECTION, Menu.NONE, R.string.cancel)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        } else {
+            menuInflater.inflate(R.menu.menu_main, menu)
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            MENU_MOVE_SELECTED -> { showMoveSelectedMemosDialog(); true }
+            MENU_COPY_TO_FOLDER_SELECTED -> { showCopySelectedMemosToFolderDialog(); true }
+            MENU_COPY_SELECTED -> { copySelectedMemos(); true }
+            MENU_DELETE_SELECTED -> { confirmDeleteSelectedMemos(); true }
+            MENU_CLEAR_SELECTION -> { clearMemoSelection(); true }
             R.id.action_new_folder -> { showNewFolderDialog(); true }
             R.id.action_export -> {
                 val name = "memojr_backup_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.json"
@@ -269,11 +332,115 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun selectedMemos(): List<Memo> {
+        return currentMemoSnapshot.filter { selectedMemoIds.contains(it.id) }
+    }
+
+    private fun copySelectedMemos() = lifecycleScope.launch {
+        val memos = selectedMemos()
+        clearMemoSelection()
+        memos.forEach { memo ->
+            val now = System.currentTimeMillis()
+            viewModel.insertMemoSync(
+                memo.copy(
+                    id = 0,
+                    title = getString(R.string.copy_title_format, memo.title.ifEmpty { getString(R.string.untitled) }),
+                    createdAt = now,
+                    updatedAt = now
+                )
+            )
+        }
+        Toast.makeText(this@MainActivity, getString(R.string.copy_memo_success, memos.size), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun confirmDeleteSelectedMemos() {
+        val memos = selectedMemos()
+        if (memos.isEmpty()) {
+            clearMemoSelection()
+            return
+        }
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.delete_memo_title))
+            .setMessage(getString(R.string.confirm_delete_selected_memos_msg, memos.size))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                lifecycleScope.launch {
+                    clearMemoSelection()
+                    viewModel.deleteMemosSync(memos)
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+
+    private fun showMoveSelectedMemosDialog() = lifecycleScope.launch {
+        val memos = selectedMemos()
+        if (memos.isEmpty()) {
+            clearMemoSelection()
+            return@launch
+        }
+        val allFolders = viewModel.getAllFoldersSync()
+        val items = mutableListOf(getString(R.string.root_folder))
+        items.addAll(allFolders.map { it.name })
+        AlertDialog.Builder(this@MainActivity)
+            .setTitle(getString(R.string.move_memo))
+            .setItems(items.toTypedArray()) { _, which ->
+                val targetFolderId = if (which == 0) null else allFolders[which - 1].id
+                lifecycleScope.launch {
+                    clearMemoSelection()
+                    val now = System.currentTimeMillis()
+                    viewModel.updateMemosSync(memos.map { it.copy(folderId = targetFolderId, updatedAt = now) })
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+
+    private fun showCopySelectedMemosToFolderDialog() = lifecycleScope.launch {
+        val memos = selectedMemos()
+        if (memos.isEmpty()) {
+            clearMemoSelection()
+            return@launch
+        }
+        val allFolders = viewModel.getAllFoldersSync()
+        val items = mutableListOf(getString(R.string.root_folder))
+        items.addAll(allFolders.map { it.name })
+        AlertDialog.Builder(this@MainActivity)
+            .setTitle(getString(R.string.copy_to_folder))
+            .setItems(items.toTypedArray()) { _, which ->
+                val targetFolderId = if (which == 0) null else allFolders[which - 1].id
+                lifecycleScope.launch {
+                    clearMemoSelection()
+                    memos.forEach { memo ->
+                        val now = System.currentTimeMillis()
+                        viewModel.insertMemoSync(
+                            memo.copy(
+                                id = 0,
+                                folderId = targetFolderId,
+                                createdAt = now,
+                                updatedAt = now
+                            )
+                        )
+                    }
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.copy_to_folder_success, memos.size),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+
     private fun getFileName(uri: Uri): String {
         return contentResolver.query(uri, null, null, null, null)?.use { cursor ->
             val idx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             if (cursor.moveToFirst() && idx >= 0) cursor.getString(idx) else null
         } ?: uri.lastPathSegment ?: "image"
+    }
+
+    private fun getTitleFromFileName(fileName: String): String {
+        return fileName.ifBlank { "image" }
     }
 
     private fun scaleBitmap(src: Bitmap, maxDim: Int): Bitmap {
@@ -282,24 +449,51 @@ class MainActivity : AppCompatActivity() {
         return Bitmap.createScaledBitmap(src, (src.width * scale).toInt(), (src.height * scale).toInt(), true)
     }
 
+    private suspend fun insertImageMemo(uri: Uri, fileName: String, folderId: Long?): Long = withContext(Dispatchers.IO) {
+        val bitmap = contentResolver.openInputStream(uri)?.use { stream ->
+            BitmapFactory.decodeStream(stream)
+        } ?: error("Could not decode image")
+        val scaled = scaleBitmap(bitmap, 1280)
+        val out = ByteArrayOutputStream()
+        scaled.compress(WEBP_FORMAT, 75, out)
+        val base64 = Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP)
+        val content = "<img src=\"data:image/webp;base64,$base64\" style=\"max-width:100%;height:auto\">"
+        val memo = Memo(title = getTitleFromFileName(fileName), content = content, folderId = folderId)
+        viewModel.insertMemoSync(memo)
+    }
+
     private fun createImageMemo(uri: Uri) = lifecycleScope.launch {
         runCatching {
-            val fileName = getFileName(uri).substringBeforeLast(".")
-            val stream = contentResolver.openInputStream(uri)!!
-            val bitmap = BitmapFactory.decodeStream(stream)
-            stream.close()
-            val scaled = scaleBitmap(bitmap, 1280)
-            val out = ByteArrayOutputStream()
-            scaled.compress(WEBP_FORMAT, 75, out)
-            val base64 = Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP)
-            val content = "<img src=\"data:image/webp;base64,$base64\" style=\"max-width:100%;height:auto\">"
+            val fileName = getFileName(uri)
             val folderId = viewModel.currentFolderId()
-            val memo = Memo(title = fileName, content = content, folderId = folderId)
-            viewModel.insertMemo(memo) { id ->
-                startActivity(Intent(this@MainActivity, MemoViewActivity::class.java).putExtra("memo_id", id))
-            }
+            val id = insertImageMemo(uri, fileName, folderId)
+            startActivity(Intent(this@MainActivity, MemoViewActivity::class.java).putExtra("memo_id", id))
         }.onFailure {
             Toast.makeText(this@MainActivity, getString(R.string.image_load_failed), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun createImageMemosFromFiles(uris: List<Uri>) = lifecycleScope.launch {
+        runCatching {
+            val folderId = viewModel.currentFolderId()
+            var imported = 0
+            uris.forEach { uri ->
+                runCatching {
+                    insertImageMemo(uri, getFileName(uri), folderId)
+                    imported++
+                }
+            }
+            showImageImportResult(imported)
+        }.onFailure {
+            Toast.makeText(this@MainActivity, getString(R.string.image_load_failed), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showImageImportResult(imported: Int) {
+        if (imported > 0) {
+            Toast.makeText(this, getString(R.string.image_folder_import_success, imported), Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, getString(R.string.image_folder_import_empty), Toast.LENGTH_SHORT).show()
         }
     }
 

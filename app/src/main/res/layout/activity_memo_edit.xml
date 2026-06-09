@@ -48,6 +48,18 @@
             android:paddingEnd="4dp">
 
             <Button
+                android:id="@+id/btnUndo"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="44dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/undo"
+                android:text="↶"
+                android:textSize="18sp"
+                android:padding="4dp" />
+
+            <View android:layout_width="1dp" android:layout_height="28dp" android:background="#BDBDBD" android:layout_marginHorizontal="4dp" />
+
+            <Button
                 android:id="@+id/btnBold"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="44dp"

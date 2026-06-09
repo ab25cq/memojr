@@ -10,7 +10,9 @@ class MemoRepository(private val memoDao: MemoDao, private val folderDao: Folder
     suspend fun getMemoById(id: Long): Memo? = memoDao.getById(id)
     suspend fun insertMemo(memo: Memo): Long = memoDao.insert(memo)
     suspend fun updateMemo(memo: Memo) = memoDao.update(memo)
+    suspend fun updateMemos(memos: List<Memo>) = memoDao.updateAll(memos)
     suspend fun deleteMemo(memo: Memo) = memoDao.delete(memo)
+    suspend fun deleteMemos(memos: List<Memo>) = memoDao.deleteAll(memos)
 
     // ── フォルダ ──
     fun getFoldersByParent(parentId: Long?): LiveData<List<Folder>> = folderDao.getByParent(parentId)
